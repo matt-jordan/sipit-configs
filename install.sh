@@ -28,6 +28,22 @@ build_pjproject() {
 	popd
 }
 
+build_asterisk() {
+	pushd ${SRC_ROOT}/${ASTERISK_SRC_DIR}
+	sudo -u ${USERNAME} ./configure --enable-dev-mode --with-pjproject
+	sudo -u ${USERNAME} make menuselect.makeopts
+
+	echo "*** Enabling debug menuselect flags ***"
+	sudo -u ${USERNAME} menuselect/menuselect --enable DONT_OPTIMIZE
+	sudo -u ${USERNAME} menuselect/menuselect --enable BETTER_BACKTRACES
+	sudo -u ${USERNAME} menuselect/menuselect --enable MALLOC_DEBUG
+	sudo -u ${USERNAME} menuselect/menuselect --enable DO_CRASH
+
+	sudo -u ${USERNAME} make
+	make install
+	popd
+}
+
 INSTALL_PJPROJECT=0
 INSTALL_ASTERISK=0
 INSTALL_CONFIGS=0
@@ -47,7 +63,7 @@ if [ ${INSTALL_PJPROJECT} -eq 1 ]; then
 fi
 
 if [ ${INSTALL_ASTERISK} -eq 1 ]; then
-	echo "Not right now"
+	build_asterisk	
 fi
 
 if [ ${INSTALL_CONFIGS} -eq 1 ]; then
