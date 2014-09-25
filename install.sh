@@ -1,8 +1,27 @@
 #!/bin/bash
 
-SRC_ROOT=~/src
+SRC_ROOT=~/projects
 PJPROJECT_SRC_DIR=pjproject
-ASTERISK_SRC_DIR=asterisk-13.0.0-beta2
+ASTERISK_SRC_DIR=13
+
+# Python scripts
+setup_python() {
+	echo "*** Installing Python libraries ***"
+
+	pip install ari
+}
+
+# System libraries
+setup_system() {
+	echo "*** Installing System libraries ***"
+
+	PACKAGES="build-essential"
+	PACKAGES="${PACKAGES} libncurses-dev libssl-dev libxml2-dev libsqlite3-dev uuid-dev uuid"
+	PACKAGES="${PACKAGES} libspandsp-dev binutils-dev libsrtp-dev libedit-dev libjansson-dev"
+	PACKAGES="${PACKAGES} subversion git libxslt1-dev"
+
+	aptitude install -y ${PACKAGES}	
+}
 
 # Install Asterisk configuration files/other things
 install_asterisk_configs() {
@@ -33,13 +52,23 @@ build_asterisk() {
 	sudo -u ${USERNAME} ./configure --enable-dev-mode --with-pjproject
 	sudo -u ${USERNAME} make menuselect.makeopts
 
+	echo "*** Enabling external MWI ***"
+	sudo -u ${USERNAME} menuselect/menuselect --disable app_voicemail menuselect.makeopts
+	sudo -u ${USERNAME} menuselect/menuselect --enable res_mwi_external menuselect.makeopts
+	sudo -u ${USERNAME} menuselect/menuselect --enable res_stasis_mailbox menuselect.makeopts 
+	sudo -u ${USERNAME} menuselect/menuselect --enable res_ari_mailboxes menuselect.makeopts 
+
 	echo "*** Enabling debug menuselect flags ***"
-	sudo -u ${USERNAME} menuselect/menuselect --enable DONT_OPTIMIZE
-	sudo -u ${USERNAME} menuselect/menuselect --enable BETTER_BACKTRACES
-	sudo -u ${USERNAME} menuselect/menuselect --enable MALLOC_DEBUG
-	sudo -u ${USERNAME} menuselect/menuselect --enable DO_CRASH
+	sudo -u ${USERNAME} menuselect/menuselect --enable DONT_OPTIMIZE menuselect.makeopts 
+	sudo -u ${USERNAME} menuselect/menuselect --enable BETTER_BACKTRACES menuselect.makeopts 
+	sudo -u ${USERNAME} menuselect/menuselect --enable MALLOC_DEBUG menuselect.makeopts 
+	sudo -u ${USERNAME} menuselect/menuselect --enable DO_CRASH menuselect.makeopts 
 
 	sudo -u ${USERNAME} make
+	if [ -f /usr/sbin/asterisk ] ; then
+		make uninstall
+	fi
+
 	make install
 	popd
 }
@@ -47,15 +76,22 @@ build_asterisk() {
 INSTALL_PJPROJECT=0
 INSTALL_ASTERISK=0
 INSTALL_CONFIGS=0
+SETUP_SYSTEM=0
 
 while [ "$#" -gt "0" ]; do
 	case ${1} in
 		-a|--asterisk)		INSTALL_ASTERISK=1;;
 		-i|--install-configs)	INSTALL_CONFIGS=1;;
 		-p|--pjproject)		INSTALL_PJPROJECT=1;;
+		-s|--system)		SETUP_SYSTEM=1;;
 	esac
 	shift
 done
+
+if [ ${SETUP_SYSTEM} -eq 1 ]; then
+	setup_python
+	setup_system
+fi
 
 if [ ${INSTALL_PJPROJECT} -eq 1 ]; then
 	setup_pjproject
