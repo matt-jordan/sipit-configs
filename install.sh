@@ -1,8 +1,14 @@
 #!/bin/bash
 
-SRC_ROOT=~/projects
+SRC_ROOT=~/src
 PJPROJECT_SRC_DIR=pjproject
-ASTERISK_SRC_DIR=13
+ASTERISK_SRC_DIR=asterisk-13.0.0-beta2
+
+# It should go without saying that these scripts are completely
+# unsafe to use in production
+
+USERNAME=digium
+GROUPNAME=digium
 
 # Python scripts
 setup_python() {
@@ -15,7 +21,7 @@ setup_python() {
 setup_system() {
 	echo "*** Installing System libraries ***"
 
-	PACKAGES="build-essential python-pip"
+	PACKAGES="build-essential python-pip vim"
 	PACKAGES="${PACKAGES} libncurses-dev libssl-dev libxml2-dev libsqlite3-dev uuid-dev uuid"
 	PACKAGES="${PACKAGES} libspandsp-dev binutils-dev libsrtp-dev libedit-dev libjansson-dev"
 	PACKAGES="${PACKAGES} subversion git libxslt1-dev"
@@ -56,12 +62,33 @@ setup_pjproject() {
 
 build_pjproject() {
 	pushd ${SRC_ROOT}/${PJPROJECT_SRC_DIR}
-	sudo -u ${USERNAME} ./configure --enable-shared --external-srtp --prefix=/usr
+	sudo -u ${USERNAME} ./configure --enable-shared --with-external-srtp --prefix=/usr
 	sudo -u ${USERNAME} make dep
 	sudo -u ${USERNAME} make
 	make install
 	popd
 }
+
+quick_build_asterisk() {
+	pushd ${SRC_ROOT}/${ASTERISK_SRC_DIR}
+
+	sudo -u ${USERNAME} make
+	if [ -f /usr/sbin/asterisk ] ; then
+		make uninstall
+	fi
+
+	make install
+
+	chown -R ${USERNAME}:${GROUPNAME} /usr/lib/asterisk
+	chown -R ${USERNAME}:${GROUPNAME} /var/lib/asterisk
+	chown -R ${USERNAME}:${GROUPNAME} /var/spool/asterisk
+	chown -R ${USERNAME}:${GROUPNAME} /var/log/asterisk
+	chown -R ${USERNAME}:${GROUPNAME} /var/run/asterisk
+	chown -R ${USERNAME}:${GROUPNAME} /etc/asterisk
+	chown ${USERNAME}:${GROUPNAME} /usr/sbin/asterisk
+	popd
+}
+
 
 build_asterisk() {
 	pushd ${SRC_ROOT}/${ASTERISK_SRC_DIR}
@@ -80,16 +107,13 @@ build_asterisk() {
 	sudo -u ${USERNAME} menuselect/menuselect --enable MALLOC_DEBUG menuselect.makeopts 
 	sudo -u ${USERNAME} menuselect/menuselect --enable DO_CRASH menuselect.makeopts 
 
-	sudo -u ${USERNAME} make
-	if [ -f /usr/sbin/asterisk ] ; then
-		make uninstall
-	fi
+	quick_build_asterisk
 
-	make install
 	popd
 }
 
 INSTALL_PJPROJECT=0
+QUICK_BUILD_ASTERISK=0
 INSTALL_ASTERISK=0
 INSTALL_CONFIGS=0
 SETUP_SYSTEM=0
@@ -97,6 +121,7 @@ SETUP_SYSTEM=0
 while [ "$#" -gt "0" ]; do
 	case ${1} in
 		-a|--asterisk)		INSTALL_ASTERISK=1;;
+		-qa|--quick-asterisk)	QUICK_BUILD_ASTERISK=1;;
 		-i|--install-configs)	INSTALL_CONFIGS=1;;
 		-p|--pjproject)		INSTALL_PJPROJECT=1;;
 		-s|--system)		SETUP_SYSTEM=1;;
@@ -116,6 +141,10 @@ fi
 
 if [ ${INSTALL_ASTERISK} -eq 1 ]; then
 	build_asterisk	
+fi
+
+if [ ${QUICK_BUILD_ASTERISK} -eq 1]; then
+	quick_build_asterisk
 fi
 
 if [ ${INSTALL_CONFIGS} -eq 1 ]; then
