@@ -15,7 +15,7 @@ setup_python() {
 setup_system() {
 	echo "*** Installing System libraries ***"
 
-	PACKAGES="build-essential pip"
+	PACKAGES="build-essential python-pip"
 	PACKAGES="${PACKAGES} libncurses-dev libssl-dev libxml2-dev libsqlite3-dev uuid-dev uuid"
 	PACKAGES="${PACKAGES} libspandsp-dev binutils-dev libsrtp-dev libedit-dev libjansson-dev"
 	PACKAGES="${PACKAGES} subversion git libxslt1-dev"
