@@ -1,0 +1,87 @@
+<?xml version="1.0" ?>
+<phonebooks>
+<contacts group_name="Directory" editable="0" id="0">
+    <contact server_uuid="REPLACE_WITH_HOSTNAME" id="1001" prefix="Mr." first_name="Malcolm" second_name="A" last_name="Davenport" suffix="Jr." contact_type="sip" organization="Digium, Inc." job_title="CJO" location="Huntsville" notes="A rapscallion" account_id="1001" subscribe_to="1001">
+        <emails>
+            <email address="malcolmd@digium.com" label="Work E-mail" primary="1"/>
+        </emails>
+        <actions>
+            <action id="primary" dial="1001" name="Office" label="Office"/>
+            <action id="intercom" dial="1001" dial_prefix="" label="Intercom" name="Intercom">
+                <headers>
+                    <header key="X-Digium-Call-Feature" value="feature_intercom"/>
+                </headers>
+            </action>
+            <action id="monitor" dial="1001" dial_prefix="" label="Monitor" name="Monitor">
+                <headers>
+                    <header key="X-Digium-Call-Feature" value="feature_monitor"/>
+                </headers>
+            </action>
+            <action id="pickup" dial="1001" dial_prefix="**" label="Pickup" name="Pickup"/>
+            <action id="sendtovm" dial="1001" dial_prefix="" label="Send to VM" name="Send to VM">
+                    <headers>
+                        <header key="X-Digium-Call-Feature" value="feature_send_to_vm"/>
+                        <header key="Diversion" value="&lt;sip:%_ACCOUNT_USERNAME_%@%_ACCOUNT_SERVER_%:%_ACCOUNT_PORT_%&gt;;reason=&quot;send_to_vm&quot;"/>
+                    </headers>
+            </action>
+        </actions>
+    </contact>
+    <contact server_uuid="REPLACE_WITH_HOSTNAME" id="1002" prefix="Mr." first_name="David" second_name="Bruce" last_name="Hardy" suffix="" contact_type="sip" organization="Digium, Inc." job_title="Director of Business Development" location="Huntsville" notes="Sell, Mortimer!" account_id="1002" subscribe_to="1002">
+        <emails>
+            <email address="dhardy@digium.com" label="Work E-mail" primary="1"/>
+        </emails>
+        <actions>
+            <action id="primary" dial="1002" name="Office" label="Office"/>
+            <action id="intercom" dial="1002" dial_prefix="" label="Intercom" name="Intercom">
+                <headers>
+                    <header key="X-Digium-Call-Feature" value="feature_intercom"/>
+                </headers>
+            </action>
+            <action id="monitor" dial="1002" dial_prefix="" label="Monitor" name="Monitor">
+                <headers>
+                    <header key="X-Digium-Call-Feature" value="feature_monitor"/>
+                </headers>
+            </action>
+            <action id="pickup" dial="1002" dial_prefix="**" label="Pickup" name="Pickup"/>
+            <action id="sendtovm" dial="1002" dial_prefix="" label="Send to VM" name="Send to VM">
+                    <headers>
+                        <header key="X-Digium-Call-Feature" value="feature_send_to_vm"/>
+                        <header key="Diversion" value="&lt;sip:%_ACCOUNT_USERNAME_%@%_ACCOUNT_SERVER_%:%_ACCOUNT_PORT_%&gt;;reason=&quot;send_to_vm&quot;"/>
+                    </headers>
+            </action>
+        </actions>
+    </contact>
+    <contact server_uuid="REPLACE_WITH_HOSTNAME" id="1003" prefix="Mr." first_name="Josh" second_name="Josh Josh" last_name="Colp" suffix="Esq." contact_type="sip" organization="Digium, Inc." job_title="Mister Asterisk" location="Thattaway" notes="Yeah, baby!" account_id="1003" subscribe_to="1003">
+        <emails>
+            <email address="jcolp@digium.com" label="Work E-mail" primary="1"/>
+        </emails>
+        <actions>
+            <action id="primary" dial="1003" name="Office" label="Office"/>
+            <action id="intercom" dial="1003" dial_prefix="" label="Intercom" name="Intercom">
+                <headers>
+                    <header key="X-Digium-Call-Feature" value="feature_intercom"/>
+                </headers>
+            </action>
+            <action id="monitor" dial="1003" dial_prefix="" label="Monitor" name="Monitor">
+                <headers>
+                    <header key="X-Digium-Call-Feature" value="feature_monitor"/>
+                </headers>
+            </action>
+            <action id="pickup" dial="1003" dial_prefix="**" label="Pickup" name="Pickup"/>
+            <action id="sendtovm" dial="1003" dial_prefix="" label="Send to VM" name="Send to VM">
+                    <headers>
+                        <header key="X-Digium-Call-Feature" value="feature_send_to_vm"/>
+                        <header key="Diversion" value="&lt;sip:%_ACCOUNT_USERNAME_%@%_ACCOUNT_SERVER_%:%_ACCOUNT_PORT_%&gt;;reason=&quot;send_to_vm&quot;"/>
+                    </headers>
+            </action>
+        </actions>
+    </contact>
+    <contact server_uuid="REPLACE_WITH_HOSTNAME" id="8888" prefix="" first_name="" last_name="Office Toggle" suffix="" contact_type="special" organization="" job_title="" location="" notes="A special extension for handling when we go home" account_id="8888" subscribe_to="allpeople">
+        <emails>
+        </emails>
+        <actions>
+            <action id="primary" dial="OpenAndClose" name="Away" label="Away"/>
+        </actions>
+    </contact>
+</contacts>
+</phonebooks>

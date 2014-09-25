@@ -1,0 +1,64 @@
+<config>
+<smart_blf>
+        <blf_items>
+            <blf_item location="side" index="2" paging="1" contact_id="1001">
+                <behaviors>
+                    <behavior phone_state="all" press_action="primary" press_function="dial" long_press_action="intercom" long_press_function="dial" />
+                    <behavior phone_state="incoming" press_action="primary" press_function="transfer" />
+                    <behavior phone_state="hold/transfer" long_press_action="primary" long_press_function="transfer" />
+                    <behavior phone_state="incoming/transfer" press_action="primary" press_function="transfer" long_press_action="sendtovm" long_press_function="transfer" />
+                    <behavior target_status="on_the_phone" long_press_action="monitor" long_press_function="dial" />
+                    <behavior target_status="ringing" long_press_action="pickup" long_press_function="dial" />
+                </behaviors>
+                <indicators>
+                    <indicator target_status="ringing" ring="0" led_color="amber" led_state="fast"/>
+                    <indicator target_status="on_the_phone" ring="0" led_color="amber" led_state="on"/>
+                    <indicator target_status="unknown" ring="0" led_color="red" led_state="off"/>
+                    <indicator target_status="idle" ring="0" led_color="green" led_state="on"/>
+                    <indicator target_status="on_hold" ring="0" led_color="red" led_state="slow"/>
+                </indicators>
+            </blf_item>
+            <blf_item location="side" index="4" paging="1" contact_id="1002">
+                <behaviors>
+                    <behavior phone_state="all" target_status="idle" press_action="primary" press_function="dial" long_press_action="intercom" long_press_function="dial" />
+                    <behavior phone_state="hold/transfer" long_press_action="primary" long_press_function="transfer" />
+                    <behavior phone_state="incoming/transfer" press_action="primary" press_function="transfer" long_press_action="sendtovm" long_press_function="transfer" />
+                    <behavior target_status="on_the_phone" long_press_action="monitor" long_press_function="dial" />
+                    <behavior target_status="ringing" long_press_action="pickup" long_press_function="dial" />
+                </behaviors>
+                <indicators>
+                    <indicator target_status="ringing" ring="0" led_color="amber" led_state="fast"/>
+                    <indicator target_status="on_the_phone" ring="0" led_color="amber" led_state="on"/>
+                    <indicator target_status="unknown" ring="0" led_color="red" led_state="off"/>
+                    <indicator target_status="idle" ring="0" led_color="green" led_state="on"/>
+                    <indicator target_status="on_hold" ring="0" led_color="red" led_state="slow"/>
+                </indicators>
+            </blf_item>
+            <blf_item location="side" index="6" paging="1" contact_id="1003">
+                <behaviors>
+                    <behavior phone_state="all" target_status="idle" press_action="primary" press_function="dial" long_press_action="intercom" long_press_function="dial" />
+                    <behavior phone_state="hold/transfer" long_press_action="primary" long_press_function="transfer" />
+                    <behavior phone_state="incoming/transfer" press_action="primary" press_function="transfer" long_press_action="sendtovm" long_press_function="transfer" />
+                    <behavior target_status="on_the_phone" long_press_action="monitor" long_press_function="dial" />
+                    <behavior target_status="ringing" long_press_action="pickup" long_press_function="dial" />
+                </behaviors>
+                <indicators>
+                    <indicator target_status="ringing" ring="0" led_color="amber" led_state="fast"/>
+                    <indicator target_status="on_the_phone" ring="0" led_color="amber" led_state="on"/>
+                    <indicator target_status="unknown" ring="0" led_color="red" led_state="off"/>
+                    <indicator target_status="idle" ring="0" led_color="green" led_state="on"/>
+                    <indicator target_status="on_hold" ring="0" led_color="red" led_state="slow"/>
+                </indicators>
+            </blf_item>
+            <blf_item location="side" index="8" paging="1" contact_id="8888">
+                <behaviors>
+                    <behavior press_action="primary" press_function="dial" long_press_action="available" long_press_function="dial" />
+                </behaviors>
+                <indicators>
+                    <indicator target_status="on_the_phone" ring="0" led_color="red" led_state="on"/>
+                    <indicator target_status="idle" ring="0" led_color="green" led_state="on"/>
+                </indicators>
+            </blf_item>
+        </blf_items>
+    </smart_blf>
+</config>

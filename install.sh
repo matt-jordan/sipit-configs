@@ -19,22 +19,38 @@ setup_system() {
 	PACKAGES="${PACKAGES} libncurses-dev libssl-dev libxml2-dev libsqlite3-dev uuid-dev uuid"
 	PACKAGES="${PACKAGES} libspandsp-dev binutils-dev libsrtp-dev libedit-dev libjansson-dev"
 	PACKAGES="${PACKAGES} subversion git libxslt1-dev"
+	PACAKGES="${PACKAGES} apache2"
 
 	aptitude install -y ${PACKAGES}	
 }
+
 
 # Install Asterisk configuration files/other things
 install_asterisk_configs() {
 	echo "*** Installing Asterisk configs ***"
 
-	cp -v asterisk/*.conf /etc/asterisk/
+	sudo -u ${USERNAME} cp -v asterisk/*.conf /etc/asterisk/
+}
+
+# Install Digium phone configuration files
+install_dphone_configs() {
+	echo "*** Installing Digium Phone configs ***"
+
+	sudo -u ${USERNAME} cp -v phone/000fd305c374.cfg /var/www/html/000fd305c374.cfg
+	sudo -u ${USERNAME} cp -v phone/*.xml /var/www/html/
+
+	primary_ip_addr=`hostname -I | awk '{printf $1;}'`
+	sudo -u ${USERNAME} sed -i s/REPLACE_WITH_MY_SERVER/${primary_ip_addr}/g /var/www/html/000fd305c374.cfg
+
+	hostname=`hostname | awk '{printf $1;}'`
+	sudo -u ${USERNAME} sed -i s/REPLACE_WITH_HOSTNAME/${hostname}/g /var/www/html/matt_contacts.xml
 }
 
 # Copy over site specific config headers
 setup_pjproject() {
 	echo "*** Configuring pjproject ***"
 
-	sudo -u ${USERNAME} cp pjproject/config_site.h ${SRC_ROOT}/${PJPROJECT_SRC_DIR}/pjlib/include/pj/config_site.h
+	sudo -u ${USERNAME} cp -v pjproject/config_site.h ${SRC_ROOT}/${PJPROJECT_SRC_DIR}/pjlib/include/pj/config_site.h
 
 }
 
@@ -104,6 +120,7 @@ fi
 
 if [ ${INSTALL_CONFIGS} -eq 1 ]; then
 	install_asterisk_configs
+	install_dphone_configs
 fi
 
 echo "*** Installation/configuration script complete ***"
