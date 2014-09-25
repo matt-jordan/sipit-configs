@@ -21,7 +21,7 @@ setup_python() {
 setup_system() {
 	echo "*** Installing System libraries ***"
 
-	PACKAGES="build-essential python-pip vim"
+	PACKAGES="build-essential python-pip vim apache2"
 	PACKAGES="${PACKAGES} libncurses-dev libssl-dev libxml2-dev libsqlite3-dev uuid-dev uuid"
 	PACKAGES="${PACKAGES} libspandsp-dev binutils-dev libsrtp-dev libedit-dev libjansson-dev"
 	PACKAGES="${PACKAGES} subversion git libxslt1-dev"
@@ -41,6 +41,8 @@ install_asterisk_configs() {
 # Install Digium phone configuration files
 install_dphone_configs() {
 	echo "*** Installing Digium Phone configs ***"
+
+	sudo chown -R ${USERNAME}:${GROUPNAME} /var/www/html
 
 	sudo -u ${USERNAME} cp -v phone/000fd305c374.cfg /var/www/html/000fd305c374.cfg
 	sudo -u ${USERNAME} cp -v phone/*.xml /var/www/html/
@@ -95,6 +97,9 @@ build_asterisk() {
 	sudo -u ${USERNAME} ./configure --enable-dev-mode --with-pjproject
 	sudo -u ${USERNAME} make menuselect.makeopts
 
+	echo "*** Enabling extra sounds ***"
+	sudo -u ${USERNAME} menuselect/menuselect --enable EXTRA-SOUNDS-EN-WAV menuselect.makeopts
+
 	echo "*** Enabling external MWI ***"
 	sudo -u ${USERNAME} menuselect/menuselect --disable app_voicemail menuselect.makeopts
 	sudo -u ${USERNAME} menuselect/menuselect --enable res_mwi_external menuselect.makeopts
@@ -143,7 +148,7 @@ if [ ${INSTALL_ASTERISK} -eq 1 ]; then
 	build_asterisk	
 fi
 
-if [ ${QUICK_BUILD_ASTERISK} -eq 1]; then
+if [ ${QUICK_BUILD_ASTERISK} -eq 1 ]; then
 	quick_build_asterisk
 fi
 
