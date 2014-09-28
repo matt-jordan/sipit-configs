@@ -2,7 +2,7 @@
 
 SRC_ROOT=~/src
 PJPROJECT_SRC_DIR=pjproject
-ASTERISK_SRC_DIR=asterisk-13.0.0-beta2
+ASTERISK_SRC_DIR=asterisk-13-sipit
 
 # It should go without saying that these scripts are completely
 # unsafe to use in production
