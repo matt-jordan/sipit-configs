@@ -36,6 +36,9 @@ install_asterisk_configs() {
 	echo "*** Installing Asterisk configs ***"
 
 	sudo -u ${USERNAME} cp -v asterisk/*.conf /etc/asterisk/
+
+	primary_ip_addr=`hostname -I | awk '{printf $1;}'`
+	sudo -u ${USERNAME} sed -i s/REPLACE_WITH_MY_SERVER/${primary_ip_addr}/g /etc/asterisk/pjsip.conf
 }
 
 # Install Digium phone configuration files
