@@ -45,7 +45,7 @@ install_asterisk_configs() {
 install_dphone_configs() {
 	echo "*** Installing Digium Phone configs ***"
 
-	sudo chown -R ${USERNAME}:${GROUPNAME} /var/www/html
+	chown -R ${USERNAME}:${GROUPNAME} /var/www/html
 
 	sudo -u ${USERNAME} cp -v phone/000fd305c374.cfg /var/www/html/000fd305c374.cfg
 	sudo -u ${USERNAME} cp -v phone/*.xml /var/www/html/
@@ -55,6 +55,18 @@ install_dphone_configs() {
 
 	hostname=`hostname | awk '{printf $1;}'`
 	sudo -u ${USERNAME} sed -i s/REPLACE_WITH_HOSTNAME/${hostname}/g /var/www/html/matt_contacts.xml
+}
+
+# Install TLS configs
+install_tls() {
+	echo "*** Installing TLS certificates ***"
+
+	if [ ! -d /etc/asterisk/tls ]; then
+		mkdir /etc/asterisk/tls
+		chown -R ${USERNAME}:${GROUPNAME} /etc/asterisk/tls
+	fi
+
+	sudo -u ${USERNAME} cp -v tls/* /etc/asterisk/tls
 }
 
 # Copy over site specific config headers
@@ -67,7 +79,7 @@ setup_pjproject() {
 
 build_pjproject() {
 	pushd ${SRC_ROOT}/${PJPROJECT_SRC_DIR}
-	sudo -u ${USERNAME} ./configure --enable-shared --with-external-srtp --prefix=/usr
+	sudo -u ${USERNAME} ./aconfigure CFLAGS="-O2" --enable-shared --with-external-srtp --prefix=/usr
 	sudo -u ${USERNAME} make dep
 	sudo -u ${USERNAME} make
 	make install
@@ -158,6 +170,7 @@ fi
 if [ ${INSTALL_CONFIGS} -eq 1 ]; then
 	install_asterisk_configs
 	install_dphone_configs
+	install_tls
 fi
 
 echo "*** Installation/configuration script complete ***"
