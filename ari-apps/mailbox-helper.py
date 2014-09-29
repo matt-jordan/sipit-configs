@@ -6,10 +6,10 @@ Copyright 2014 Matt Jordan
 
 import ari
 import logging
+import time
 
 logging.basicConfig(level=logging.ERROR)
 
-client = ari.connect('http://localhost:8088', 'asterisk', 'asterisk')
 
 def stasis_start_handler(channel_obj, ev):
     """Handler for StasisStart event"""
@@ -37,7 +37,14 @@ def stasis_start_handler(channel_obj, ev):
 
     channel.continueInDialplan()
 
-client.on_channel_event('StasisStart', stasis_start_handler)
 
-client.run(apps='mailbox-helper')
+while True:
+    try:
+        client = ari.connect('http://localhost:8088', 'asterisk', 'asterisk')
+        client.on_channel_event('StasisStart', stasis_start_handler)
+        client.run(apps='mailbox-helper')
+    except:
+        print "Shazbot!"
+        time.sleep(1)
+
 
