@@ -39,6 +39,19 @@ install_asterisk_configs() {
 
 	primary_ip_addr=`hostname -I | awk '{printf $1;}'`
 	sudo -u ${USERNAME} sed -i s/REPLACE_WITH_MY_SERVER/${primary_ip_addr}/g /etc/asterisk/pjsip.conf
+
+	if [ `hostname | awk '{printf $1;}' | grep 01` ] ; then
+		sudo -u ${USERNAME} sed -i s,REPLACE_WITH_MY_CERT,/etc/asterisk/tls/domain_cert_h1.digium.sipit.net.pem,g /etc/asterisk/pjsip.conf
+		sudo -u ${USERNAME} sed -i s,REPLACE_WITH_MY_KEY,/etc/asterisk/tls/domain_key_h1.digium.sipit.net.pem,g /etc/asterisk/pjsip.conf
+	fi
+	if [ `hostname | awk '{printf $1;}' | grep 02` ] ; then
+		sudo -u ${USERNAME} sed -i s,REPLACE_WITH_MY_CERT,/etc/asterisk/tls/domain_cert_h2.digium.sipit.net.pem,g /etc/asterisk/pjsip.conf
+		sudo -u ${USERNAME} sed -i s,REPLACE_WITH_MY_KEY,/etc/asterisk/tls/domain_key_h2.digium.sipit.net.pem,g /etc/asterisk/pjsip.conf
+	fi
+	if [ `hostname | awk '{printf $1;}' | grep 03` ] ; then
+		sudo -u ${USERNAME} sed -i s,REPLACE_WITH_MY_CERT,/etc/asterisk/tls/domain_cert_h3.digium.sipit.net.pem,g /etc/asterisk/pjsip.conf
+		sudo -u ${USERNAME} sed -i s,REPLACE_WITH_MY_KEY,/etc/asterisk/tls/domain_key_h3.digium.sipit.net.pem,g /etc/asterisk/pjsip.conf
+	fi
 }
 
 # Install Digium phone configuration files
@@ -79,7 +92,7 @@ setup_pjproject() {
 
 build_pjproject() {
 	pushd ${SRC_ROOT}/${PJPROJECT_SRC_DIR}
-	sudo -u ${USERNAME} ./aconfigure CFLAGS="-O2" --enable-shared --with-external-srtp --prefix=/usr
+	sudo -u ${USERNAME} ./aconfigure CFLAGS="-g" --enable-shared --with-external-srtp --prefix=/usr
 	sudo -u ${USERNAME} make dep
 	sudo -u ${USERNAME} make
 	make install
