@@ -40,6 +40,9 @@ install_asterisk_configs() {
 	primary_ip_addr=`hostname -I | awk '{printf $1;}'`
 	sudo -u ${USERNAME} sed -i s/REPLACE_WITH_MY_SERVER/${primary_ip_addr}/g /etc/asterisk/pjsip.conf
 
+	ipv6_addr=`hostname -I | awk '{printf $2;}'`
+	sudo -u ${USERNAME} sed -i s/REPLACE_WITH_MY_IPV6_ADDR/${ipv6_addr}/g /etc/asterisk/pjsip.conf
+
 	if [ `hostname | awk '{printf $1;}' | grep 01` ] ; then
 		sudo -u ${USERNAME} sed -i s,REPLACE_WITH_MY_CERT,/etc/asterisk/tls/domain_cert_h1.digium.sipit.net.pem,g /etc/asterisk/pjsip.conf
 		sudo -u ${USERNAME} sed -i s,REPLACE_WITH_MY_KEY,/etc/asterisk/tls/domain_key_h1.digium.sipit.net.pem,g /etc/asterisk/pjsip.conf
